@@ -10,16 +10,16 @@
   :root{
     --cream:#f5f1e6;
     --cream-2:#efe9d8;
+    --champagne:#F7E6CA;
+    --off-white:#F5F0F0;
+    --cream-wedding:#FFFDD0;
     --ink:#2c2a20;
     --ink-soft:#5a5644;
     --olive-dark:#4b4a2e;
-    --olive:#6e7048;
-    --sage:#8b9070;
     --rust:#a8492e;
-    --rust-deep:#7a3323;
-    --butter:#e3d89c;
     --line:#d9d2b8;
     --gold:#a9915a;
+    --grey-dark:#6b6b63;
   }
 
   *{box-sizing:border-box;}
@@ -154,31 +154,13 @@
     color:var(--gold); margin:26px 0 12px; text-transform:uppercase;
   }
 
-  .swatch-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(110px,1fr)); gap:10px; }
-  .swatch{
-    border:1px solid var(--line); border-radius:4px; padding:12px 10px;
-    cursor:pointer; text-align:left; background:var(--cream-2);
-    position:relative; transition:transform .18s ease, box-shadow .18s ease;
-  }
-  .swatch:hover{ transform:translateY(-2px); box-shadow:0 10px 18px -12px rgba(44,42,32,0.3); }
-  .swatch .chip{ width:100%; height:34px; border-radius:3px; margin-bottom:8px; border:1px solid rgba(0,0,0,0.08); }
-  .swatch .name{ font-size:14px; color:var(--ink); display:block; line-height:1.25; }
-  .swatch .hex{ font-size:11px; color:var(--ink-soft); letter-spacing:0.04em; }
-  .swatch .copied-tag{
-    position:absolute; top:8px; right:8px; font-size:10px; letter-spacing:.08em;
-    background:var(--olive-dark); color:var(--cream); padding:2px 7px; border-radius:10px;
-    opacity:0; transform:translateY(-4px); transition:opacity .2s ease, transform .2s ease;
-    text-transform:uppercase; font-family:'Cormorant SC', serif;
-  }
-  .swatch.copied .copied-tag{ opacity:1; transform:translateY(0); }
-
-  .variant-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(130px,1fr)); gap:14px; }
+  .variant-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(100px, 140px)); gap:14px; justify-content:center; }
   .variant{
-    border:1px solid var(--line); border-radius:4px; padding:16px 10px 12px;
-    text-align:center; background:var(--cream-2);
+    border:1px solid var(--line); border-radius:4px; padding:12px 8px 10px;
+    text-align:center; background:var(--grey-dark);
   }
-  .variant .mini-figure{ width:64px; margin:0 auto 10px; }
-  .variant .vname{ font-size:14px; font-style:italic; color:var(--ink); display:block; }
+  .variant .mini-figure{ width:64px; margin:0 auto 8px; }
+  .variant .vname{ font-size:14px; font-style:italic; color:var(--cream); display:block; }
 
   .modal-note{
     margin-top:24px; font-size:13px; color:var(--ink-soft); text-align:center;
@@ -268,13 +250,10 @@
       <button class="close-btn" id="closeBtn" aria-label="Close">✕</button>
     </div>
 
-    <p class="section-label">Palette — tap to copy</p>
-    <div class="swatch-row" id="swatchRow"></div>
-
-    <p class="section-label">Other looks in this palette</p>
+    <p class="section-label">Preferred Color Palettes</p>
     <div class="variant-row" id="variantRow"></div>
 
-    <p class="modal-note">Any of the shades above will work — mix textures and patterns freely within the family.</p>
+    <p class="modal-note">Please follow the color palette for a cohesive look!</p>
   </div>
 </div>
 
@@ -282,41 +261,17 @@
   const data = {
     ladies: {
       role: "Ladies",
-      sub: "Floor-length dress or gown",
-      swatches: [
-        {name:"Pale Butter", hex:"#F0ECC6"},
-        {name:"Butter Yellow", hex:"#E4D9A0"},
-        {name:"Deep Butter", hex:"#CBB97E"},
-        {name:"Olive", hex:"#6B6B3E"},
-        {name:"Antique Gold Olive", hex:"#A9974F"},
-        {name:"Sage Green", hex:"#5C6B3C"},
-        {name:"Rust Satin", hex:"#8B3A2A"},
-        {name:"Rust", hex:"#7A4A35"},
-        {name:"Burnt Orange", hex:"#8B2E1F"}
-      ],
+      sub: "-----",
       variants: [
-        {name:"One-shoulder butter gown", hex:"#E4D9A0"},
-        {name:"Olive draped column", hex:"#6B6B3E"},
-        {name:"Rust silk slip gown", hex:"#8B3A2A"},
-        {name:"Burnt orange tiered gown", hex:"#8B2E1F"}
+        {name:"Champagne", hex:"#F7E6CA"},
       ]
     },
     gentlemen: {
       role: "Gentlemen",
-      sub: "Formal full suit, formal shoes",
-      swatches: [
-        {name:"Sage Olive", hex:"#7C8268"},
-        {name:"Black", hex:"#1B1B1B"},
-        {name:"Taupe Brown", hex:"#6B5A52"},
-        {name:"Deep Black", hex:"#141414"},
-        {name:"Espresso Brown", hex:"#5A3A34"},
-        {name:"Dark Olive", hex:"#3B3F2B"}
-      ],
+      sub: "Barong",
       variants: [
-        {name:"Double-breasted brown", hex:"#6B5A52"},
-        {name:"Olive two-piece", hex:"#7C8268"},
-        {name:"Navy three-piece", hex:"#2f3a52"},
-        {name:"Charcoal black suit", hex:"#1B1B1B"}
+        {name:"Off-white", hex:"#F5F0F0"},
+        {name:"Cream", hex:"#FFFDD0"},
       ]
     }
   };
@@ -324,7 +279,6 @@
   const overlay = document.getElementById('overlay');
   const modalRole = document.getElementById('modalRole');
   const modalSub = document.getElementById('modalSub');
-  const swatchRow = document.getElementById('swatchRow');
   const variantRow = document.getElementById('variantRow');
   const closeBtn = document.getElementById('closeBtn');
 
@@ -336,15 +290,6 @@
     const look = data[key];
     modalRole.textContent = look.role;
     modalSub.textContent = look.sub;
-
-    swatchRow.innerHTML = look.swatches.map(s => `
-      <button class="swatch" data-hex="${s.hex}" data-name="${s.name}">
-        <span class="copied-tag">Copied</span>
-        <span class="chip" style="background:${s.hex}"></span>
-        <span class="name">${s.name}</span><br/>
-        <span class="hex">${s.hex}</span>
-      </button>
-    `).join('');
 
     variantRow.innerHTML = look.variants.map(v => `
       <div class="variant">
@@ -372,15 +317,6 @@
   closeBtn.addEventListener('click', closeModal);
   overlay.addEventListener('click', e => { if(e.target === overlay) closeModal(); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
-
-  swatchRow.addEventListener('click', e => {
-    const btn = e.target.closest('.swatch');
-    if(!btn) return;
-    const name = btn.dataset.name;
-    navigator.clipboard?.writeText(name).catch(()=>{});
-    btn.classList.add('copied');
-    setTimeout(() => btn.classList.remove('copied'), 1200);
-  });
 </script>
 
 </body>
