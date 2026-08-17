@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J&N Wedding - Dress Code</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Parisienne&display=swap');
+
+  :root{
+    --cream:#f5f1e6;
+    --cream-2:#efe9d8;
+    --ink:#2c2a20;
+    --ink-soft:#5a5644;
+    --olive-dark:#4b4a2e;
+    --olive:#6e7048;
+    --sage:#8b9070;
+    --rust:#a8492e;
+    --rust-deep:#7a3323;
+    --butter:#e3d89c;
+    --line:#d9d2b8;
+    --gold:#a9915a;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Cormorant Garamond', serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .bg-texture{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(169,145,90,0.05), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(168,73,46,0.05), transparent 45%);
+  }
+
+  main{position:relative; z-index:1; max-width:1040px; margin:0 auto; padding:64px 24px 120px;}
+
+  header.hero{text-align:center; margin-bottom:56px;}
+  .eyebrow{
+    letter-spacing:0.35em; text-transform:uppercase; font-size:12px;
+    color:var(--gold); font-family:'Cormorant SC', serif; margin:0 0 10px;
+  }
+  h1{
+    font-family:'Cormorant SC', serif; font-weight:500;
+    font-size:clamp(38px, 6vw, 62px);
+    letter-spacing:0.12em; margin:0; color:var(--olive-dark);
+  }
+  .script{
+    font-family:'Parisienne', cursive; font-size:clamp(28px, 4.2vw, 42px);
+    color:var(--rust); margin:6px 0 0; font-weight:400;
+  }
+  .subline{
+    max-width:520px; margin:22px auto 0; color:var(--ink-soft);
+    font-size:18px; line-height:1.6;
+  }
+
+  .divider{
+    width:64px; height:1px; background:var(--gold); margin:34px auto 0; opacity:0.6;
+  }
+
+  .showcase{
+    display:grid; grid-template-columns:1fr 1fr; gap:36px; margin-top:56px;
+  }
+  @media (max-width:720px){ .showcase{grid-template-columns:1fr;} }
+
+  .look-card{
+    background:var(--cream-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:36px 28px 30px;
+    text-align:center;
+    cursor:pointer;
+    position:relative;
+    transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease, border-color .45s ease;
+  }
+  .look-card:hover, .look-card:focus-visible{
+    transform:translateY(-6px) scale(1.035);
+    box-shadow:0 22px 40px -18px rgba(44,42,32,0.28);
+    border-color:var(--gold);
+    outline:none;
+  }
+  .look-card .role{
+    font-family:'Parisienne', cursive; color:var(--olive-dark);
+    font-size:26px; margin:0 0 4px;
+  }
+  .look-card .look-name{
+    font-family:'Cormorant Garamond', serif; font-style:italic; color:var(--ink-soft);
+    font-size:16px; margin:0 0 22px; letter-spacing:0.02em;
+  }
+  .figure-wrap{
+    width:100%; max-width:220px; margin:0 auto;
+    transition:transform .45s cubic-bezier(.22,1,.36,1);
+  }
+  .look-card:hover .figure-wrap{ transform:scale(1.04); }
+
+  .hint{
+    margin-top:20px; font-size:13px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--gold); font-family:'Cormorant SC', serif;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .hint::before, .hint::after{ content:""; width:18px; height:1px; background:var(--gold); opacity:.6;}
+
+  /* ---- modal ---- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(30,28,20,0.55);
+    display:flex; align-items:center; justify-content:center; padding:20px;
+    opacity:0; pointer-events:none; transition:opacity .3s ease; z-index:50;
+  }
+  .overlay.open{ opacity:1; pointer-events:auto; }
+
+  .modal{
+    background:var(--cream); width:100%; max-width:640px; max-height:88vh;
+    overflow-y:auto; border-radius:6px; padding:38px 34px 32px;
+    transform:translateY(18px) scale(.97); opacity:0;
+    transition:transform .38s cubic-bezier(.22,1,.36,1), opacity .38s ease;
+    border:1px solid var(--line);
+  }
+  .overlay.open .modal{ transform:translateY(0) scale(1); opacity:1; }
+
+  .modal-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;}
+  .modal-title .role{ font-family:'Parisienne', cursive; font-size:28px; color:var(--olive-dark); display:block;}
+  .modal-title .look-name{ font-style:italic; color:var(--ink-soft); font-size:16px;}
+  .close-btn{
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+    flex:none;
+  }
+  .close-btn:hover{ background:var(--olive-dark); color:var(--cream); border-color:var(--olive-dark); }
+
+  .section-label{
+    font-family:'Cormorant SC', serif; letter-spacing:0.2em; font-size:13px;
+    color:var(--gold); margin:26px 0 12px; text-transform:uppercase;
+  }
+
+  .swatch-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(110px,1fr)); gap:10px; }
+  .swatch{
+    border:1px solid var(--line); border-radius:4px; padding:12px 10px;
+    cursor:pointer; text-align:left; background:var(--cream-2);
+    position:relative; transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .swatch:hover{ transform:translateY(-2px); box-shadow:0 10px 18px -12px rgba(44,42,32,0.3); }
+  .swatch .chip{ width:100%; height:34px; border-radius:3px; margin-bottom:8px; border:1px solid rgba(0,0,0,0.08); }
+  .swatch .name{ font-size:14px; color:var(--ink); display:block; line-height:1.25; }
+  .swatch .hex{ font-size:11px; color:var(--ink-soft); letter-spacing:0.04em; }
+  .swatch .copied-tag{
+    position:absolute; top:8px; right:8px; font-size:10px; letter-spacing:.08em;
+    background:var(--olive-dark); color:var(--cream); padding:2px 7px; border-radius:10px;
+    opacity:0; transform:translateY(-4px); transition:opacity .2s ease, transform .2s ease;
+    text-transform:uppercase; font-family:'Cormorant SC', serif;
+  }
+  .swatch.copied .copied-tag{ opacity:1; transform:translateY(0); }
+
+  .variant-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(130px,1fr)); gap:14px; }
+  .variant{
+    border:1px solid var(--line); border-radius:4px; padding:16px 10px 12px;
+    text-align:center; background:var(--cream-2);
+  }
+  .variant .mini-figure{ width:64px; margin:0 auto 10px; }
+  .variant .vname{ font-size:14px; font-style:italic; color:var(--ink); display:block; }
+
+  .modal-note{
+    margin-top:24px; font-size:13px; color:var(--ink-soft); text-align:center;
+    border-top:1px dashed var(--line); padding-top:16px;
+  }
+
+  footer{ text-align:center; margin-top:80px; color:var(--ink-soft); font-size:14px; letter-spacing:.04em; }
+  footer .script{ font-size:20px; margin-bottom:2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-texture"></div>
+
+<main>
+  <header class="hero">
+    <p class="eyebrow">The Wedding of Jim &amp; Niña</p>
+    <h1>Dress Code</h1>
+    <p class="script">Strictly Formal(?)</p>
+    <p class="subline">quick description ng dress code. Tap a look for colors and variants.</p>
+    <div class="divider"></div>
+  </header>
+
+  <section class="showcase">
+    <article class="look-card" tabindex="0" data-look="ladies" role="button" aria-haspopup="dialog">
+      <p class="role">Ladies</p>
+      <p class="look-name">Description</p>
+      <div class="figure-wrap">
+        <svg viewBox="0 0 200 400" width="100%" role="img" aria-label="Sample gown silhouette">
+          <defs>
+            <linearGradient id="gownGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#c9482c"/>
+              <stop offset="100%" stop-color="#7a3323"/>
+            </linearGradient>
+          </defs>
+          <path d="M100,42 C82,42 72,56 72,76 C72,94 76,108 82,128 C58,164 40,224 31,298 C27,336 31,376 40,394 L160,394 C169,376 173,336 169,298 C160,224 142,164 118,128 C124,108 128,94 128,76 C128,56 118,42 100,42 Z"
+                fill="url(#gownGrad)" stroke="#4b1f14" stroke-width="1.2"/>
+          <path d="M74,128 Q100,140 126,128" fill="none" stroke="#f5e9c8" stroke-width="1" opacity="0.55"/>
+          <path d="M100,42 C110,42 118,50 120,60" fill="none" stroke="#f5e9c8" stroke-width="1" opacity="0.4"/>
+        </svg>
+      </div>
+      <p class="hint">Tap to view colors</p>
+    </article>
+
+    <article class="look-card" tabindex="0" data-look="gentlemen" role="button" aria-haspopup="dialog">
+      <p class="role">Gentlemen</p>
+      <p class="look-name">Description</p>
+      <div class="figure-wrap">
+        <svg viewBox="0 0 200 400" width="100%" role="img" aria-label="Sample suit silhouette">
+          <defs>
+            <linearGradient id="suitGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#6e7048"/>
+              <stop offset="100%" stop-color="#3f4128"/>
+            </linearGradient>
+          </defs>
+          <path d="M62,58 L100,84 L138,58 L162,92 L152,142 L158,262 L142,394 L58,394 L42,262 L48,142 L38,92 Z"
+                fill="url(#suitGrad)" stroke="#2b2c19" stroke-width="1.2"/>
+          <path d="M100,84 L84,150 L100,168 L100,84" fill="#f5f1e6" opacity="0.92"/>
+          <path d="M100,84 L116,150 L100,168 L100,84" fill="#efe9d8" opacity="0.85"/>
+          <path d="M100,120 L100,394" stroke="#2b2c19" stroke-width="1" opacity="0.4"/>
+          <circle cx="100" cy="210" r="2.4" fill="#2b2c19" opacity="0.7"/>
+          <circle cx="100" cy="234" r="2.4" fill="#2b2c19" opacity="0.7"/>
+        </svg>
+      </div>
+      <p class="hint">Tap to view colors</p>
+    </article>
+  </section>
+
+  <footer>
+    <p class="script">See you there!</p>
+  </footer>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" id="modal">
+    <div class="modal-top">
+      <div class="modal-title">
+        <span class="role" id="modalRole">Ladies</span>
+        <span class="look-name" id="modalSub">Description</span>
+      </div>
+      <button class="close-btn" id="closeBtn" aria-label="Close">✕</button>
+    </div>
+
+    <p class="section-label">Palette — tap to copy</p>
+    <div class="swatch-row" id="swatchRow"></div>
+
+    <p class="section-label">Other looks in this palette</p>
+    <div class="variant-row" id="variantRow"></div>
+
+    <p class="modal-note">Any of the shades above will work — mix textures and patterns freely within the family.</p>
+  </div>
+</div>
+
+<script>
+  const data = {
+    ladies: {
+      role: "Ladies",
+      sub: "Floor-length dress or gown",
+      swatches: [
+        {name:"Pale Butter", hex:"#F0ECC6"},
+        {name:"Butter Yellow", hex:"#E4D9A0"},
+        {name:"Deep Butter", hex:"#CBB97E"},
+        {name:"Olive", hex:"#6B6B3E"},
+        {name:"Antique Gold Olive", hex:"#A9974F"},
+        {name:"Sage Green", hex:"#5C6B3C"},
+        {name:"Rust Satin", hex:"#8B3A2A"},
+        {name:"Rust", hex:"#7A4A35"},
+        {name:"Burnt Orange", hex:"#8B2E1F"}
+      ],
+      variants: [
+        {name:"One-shoulder butter gown", hex:"#E4D9A0"},
+        {name:"Olive draped column", hex:"#6B6B3E"},
+        {name:"Rust silk slip gown", hex:"#8B3A2A"},
+        {name:"Burnt orange tiered gown", hex:"#8B2E1F"}
+      ]
+    },
+    gentlemen: {
+      role: "Gentlemen",
+      sub: "Formal full suit, formal shoes",
+      swatches: [
+        {name:"Sage Olive", hex:"#7C8268"},
+        {name:"Black", hex:"#1B1B1B"},
+        {name:"Taupe Brown", hex:"#6B5A52"},
+        {name:"Deep Black", hex:"#141414"},
+        {name:"Espresso Brown", hex:"#5A3A34"},
+        {name:"Dark Olive", hex:"#3B3F2B"}
+      ],
+      variants: [
+        {name:"Double-breasted brown", hex:"#6B5A52"},
+        {name:"Olive two-piece", hex:"#7C8268"},
+        {name:"Navy three-piece", hex:"#2f3a52"},
+        {name:"Charcoal black suit", hex:"#1B1B1B"}
+      ]
+    }
+  };
+
+  const overlay = document.getElementById('overlay');
+  const modalRole = document.getElementById('modalRole');
+  const modalSub = document.getElementById('modalSub');
+  const swatchRow = document.getElementById('swatchRow');
+  const variantRow = document.getElementById('variantRow');
+  const closeBtn = document.getElementById('closeBtn');
+
+  function miniFigureSVG(hex){
+    return `<svg class="mini-figure" viewBox="0 0 60 90"><rect x="10" y="10" width="40" height="70" rx="8" fill="${hex}" opacity="0.9"/></svg>`;
+  }
+
+  function openModal(key){
+    const look = data[key];
+    modalRole.textContent = look.role;
+    modalSub.textContent = look.sub;
+
+    swatchRow.innerHTML = look.swatches.map(s => `
+      <button class="swatch" data-hex="${s.hex}" data-name="${s.name}">
+        <span class="copied-tag">Copied</span>
+        <span class="chip" style="background:${s.hex}"></span>
+        <span class="name">${s.name}</span><br/>
+        <span class="hex">${s.hex}</span>
+      </button>
+    `).join('');
+
+    variantRow.innerHTML = look.variants.map(v => `
+      <div class="variant">
+        ${miniFigureSVG(v.hex)}
+        <span class="vname">${v.name}</span>
+      </div>
+    `).join('');
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(){
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.look-card').forEach(card => {
+    card.addEventListener('click', () => openModal(card.dataset.look));
+    card.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openModal(card.dataset.look); }
+    });
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if(e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+  swatchRow.addEventListener('click', e => {
+    const btn = e.target.closest('.swatch');
+    if(!btn) return;
+    const name = btn.dataset.name;
+    navigator.clipboard?.writeText(name).catch(()=>{});
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1200);
+  });
+</script>
+
+</body>
+</html>
